@@ -1,7 +1,7 @@
 package pl.dmichalski.reservations.business.validation;
 
 import org.springframework.stereotype.Component;
-import pl.dmichalski.reservations.business.entity.Room;
+import pl.dmichalski.reservations.business.entity.old.Room;
 
 import java.util.Optional;
 

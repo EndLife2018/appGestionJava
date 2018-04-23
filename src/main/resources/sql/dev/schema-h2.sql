@@ -174,3 +174,18 @@ CREATE TABLE address_history (
   city         TEXT NOT NULL,
   postal_code  TEXT NOT NULL
 );
+
+CREATE TABLE users (
+  id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  username     TEXT NOT NULL,
+  password     TEXT NOT NULL
+);
+
+CREATE TABLE files (
+  id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id_user   INT  NOT NULL REFERENCES users (id),
+  fileName     TEXT NOT NULL,
+  fileData LONGBLOB,
+  fileType VARCHAR (50) NOT NULL,
+  addedDate DATE NOT NULL,
+);

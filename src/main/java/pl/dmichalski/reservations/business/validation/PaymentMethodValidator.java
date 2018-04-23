@@ -1,7 +1,7 @@
 package pl.dmichalski.reservations.business.validation;
 
 import org.springframework.stereotype.Component;
-import pl.dmichalski.reservations.business.entity.PaymentMethod;
+import pl.dmichalski.reservations.business.entity.old.PaymentMethod;
 
 import java.util.Optional;
 
