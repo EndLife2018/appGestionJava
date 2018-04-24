@@ -6,7 +6,7 @@ import pl.dmichalski.reservations.business.service.UserService;
 import pl.dmichalski.reservations.business.ui.connection.view.MainConnectionView;
 import pl.dmichalski.reservations.business.ui.connection.view.modal.ConnexionModal;
 import pl.dmichalski.reservations.business.ui.main_menu.controller.MainMenuController;
-import pl.dmichalski.reservations.business.ui.old.shared.controller.AbstractFrameController;
+import pl.dmichalski.reservations.shared.controller.AbstractFrameController;
 
 import javax.swing.*;
 

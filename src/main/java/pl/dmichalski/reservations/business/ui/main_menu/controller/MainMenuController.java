@@ -7,12 +7,16 @@ import pl.dmichalski.reservations.business.service.FileService;
 import pl.dmichalski.reservations.business.service.UserService;
 import pl.dmichalski.reservations.business.ui.main_menu.view.MainMenu;
 import pl.dmichalski.reservations.business.ui.main_menu.view.modal.FileAdded;
-import pl.dmichalski.reservations.business.ui.old.shared.controller.AbstractFrameController;
+import pl.dmichalski.reservations.shared.controller.AbstractFrameController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -23,6 +27,7 @@ public class MainMenuController extends AbstractFrameController {
     private FileService fileService;
     private DefaultListModel<File> fileList;
     private FileAdded fileAddedFrame;
+    private String hasToReverseOrderBy;
 
 
     @Autowired
@@ -62,6 +67,10 @@ public class MainMenuController extends AbstractFrameController {
         mainMenuFrame.setVisible(true);
 
         this.registerAction(mainMenuFrame.getSupprimerButton(), (e) -> this.onDeleteClicked());
+        this.registerAction(mainMenuFrame.getSortByDateButton(), (e) -> this.sortList("date"));
+        this.registerAction(mainMenuFrame.getSortByNameButton(), (e) -> this.sortList("name"));
+        this.registerAction(mainMenuFrame.getSortByTypeButton(), (e) -> this.sortList("type"));
+
         this.registerAction(mainMenuFrame.getAjouterButton(), (e) -> {
             try {
                 this.onAjouterClicked();
@@ -76,6 +85,44 @@ public class MainMenuController extends AbstractFrameController {
                 e1.printStackTrace();
             }
         });
+    }
+
+    private void sortList(String type) {
+        Integer selectedIndex = this.mainMenuFrame.getList1().getSelectedIndex();
+        List<File> modelList = (List<File>)(Object)Arrays.asList(this.fileList.toArray());
+        switch (type) {
+            case "date":
+                if(this.hasToReverseOrderBy != null && this.hasToReverseOrderBy.equals("date")) {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getAddedDate).reversed()).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = null;
+                } else {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getAddedDate)).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = "date";
+                }
+                break;
+            case "name":
+                if(this.hasToReverseOrderBy != null && this.hasToReverseOrderBy.equals("name")) {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getFileName).reversed()).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = null;
+                } else {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getFileName)).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = "name";
+                }
+                break;
+            case "type":
+                if(this.hasToReverseOrderBy != null && this.hasToReverseOrderBy.equals("type")) {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getFileType).reversed()).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = null;
+                } else {
+                    modelList = modelList.stream().sorted(Comparator.comparing(File::getFileType)).collect(Collectors.toList());
+                    this.hasToReverseOrderBy = "type";
+                }
+                break;
+        }
+        fileList = new DefaultListModel<>();
+        modelList.forEach(r -> fileList.addElement(r));
+        this.mainMenuFrame.getList1().setModel(fileList);
+        this.mainMenuFrame.getList1().setSelectedIndex(selectedIndex);
     }
 
     private void downloadFile() throws SQLException, IOException {
@@ -119,7 +166,7 @@ public class MainMenuController extends AbstractFrameController {
             workFile.setFileData(new javax.sql.rowset.serial.SerialBlob(file));
             String name = chooser.getSelectedFile().getName();
             workFile.setFileName(name);
-            workFile.setFileType(name.substring(name.lastIndexOf("."),name.length()));
+            workFile.setFileType(name.substring(name.lastIndexOf("."),name.length()).replace(".",""));
             workFile.setUser(UserService.currentUser);
             fileService.saveFile(workFile);
             fileList.addElement(workFile);

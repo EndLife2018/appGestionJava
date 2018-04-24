@@ -6,8 +6,9 @@ import pl.dmichalski.reservations.business.util.ConstMessagesEN;
 import pl.dmichalski.reservations.business.util.LookAndFeelUtils;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 @Component
 public class MainMenu extends JFrame {
@@ -17,23 +18,32 @@ public class MainMenu extends JFrame {
     private JButton ajouterButton;
     private JButton supprimerButton;
     private JButton telechargerButton;
+    private JButton sortByNameButton;
+    private JButton sortByDateButton;
+    private JButton sortByTypeButton;
+    private JPanel btnPanel;
 
 
     public MainMenu() throws HeadlessException {
         this.setFrameUp();
-        list1.addListSelectionListener(this::onElementSelected);
+        list1.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                supprimerButton.setEnabled(true);
+                telechargerButton.setEnabled(true);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                //supprimerButton.setEnabled(false);
+                //telechargerButton.setEnabled(false);
+            }
+        });
     }
 
     public void appendFileList(ListModel<File> files) {
         this.list1.setModel(files);
     }
-
-    private void onElementSelected(ListSelectionEvent e) {
-        supprimerButton.setEnabled(true);
-        telechargerButton.setEnabled(true);
-        list1.removeListSelectionListener(this::onElementSelected);
-    }
-
 
     private void setFrameUp() {
         setSize(500,500);
@@ -66,6 +76,18 @@ public class MainMenu extends JFrame {
 
     public JButton getTelechargerButton() {
         return telechargerButton;
+    }
+
+    public JButton getSortByNameButton() {
+        return sortByNameButton;
+    }
+
+    public JButton getSortByDateButton() {
+        return sortByDateButton;
+    }
+
+    public JButton getSortByTypeButton() {
+        return sortByTypeButton;
     }
 }
 
