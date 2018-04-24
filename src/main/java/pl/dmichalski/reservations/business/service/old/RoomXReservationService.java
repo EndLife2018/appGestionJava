@@ -3,7 +3,7 @@ package pl.dmichalski.reservations.business.service.old;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.dmichalski.reservations.business.entity.old.RoomXReservation;
-import pl.dmichalski.reservations.business.repository.RoomXReservationRepository;
+import pl.dmichalski.reservations.business.repository.old.RoomXReservationRepository;
 
 import java.util.List;
 

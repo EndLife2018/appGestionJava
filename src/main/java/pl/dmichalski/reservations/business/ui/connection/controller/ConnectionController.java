@@ -2,7 +2,6 @@ package pl.dmichalski.reservations.business.ui.connection.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import pl.dmichalski.reservations.business.repository.UserRepository;
 import pl.dmichalski.reservations.business.service.UserService;
 import pl.dmichalski.reservations.business.ui.connection.view.MainConnectionView;
 import pl.dmichalski.reservations.business.ui.connection.view.modal.ConnexionModal;
@@ -16,19 +15,16 @@ public class ConnectionController extends AbstractFrameController {
 
     private MainConnectionView mainConnectionFrame;
     private ConnexionModal connexionModal;
-    private UserRepository userRepository;
     private MainMenuController mainMenuController;
     @Autowired
     private UserService userService;
 
     @Autowired
-    public ConnectionController(MainConnectionView mainConnectionFrame, ConnexionModal connexionModal, UserRepository userRepository, MainMenuController mainMenuController) {
+    public ConnectionController(MainConnectionView mainConnectionFrame, ConnexionModal connexionModal, MainMenuController mainMenuController) {
         this.mainConnectionFrame = mainConnectionFrame;
         this.connexionModal = connexionModal;
-        this.userRepository = userRepository;
         this.mainMenuController = mainMenuController;
         this.prepareModal();
-
     }
 
     public void prepareModal() {

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.dmichalski.reservations.business.entity.old.Client;
 import pl.dmichalski.reservations.business.entity.domain.ClientReservationCount;
-import pl.dmichalski.reservations.business.repository.ClientRepository;
+import pl.dmichalski.reservations.business.repository.old.ClientRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

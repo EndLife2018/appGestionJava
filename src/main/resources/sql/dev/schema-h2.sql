@@ -183,9 +183,9 @@ CREATE TABLE users (
 
 CREATE TABLE files (
   id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  id_user   INT  NOT NULL REFERENCES users (id),
-  fileName     TEXT NOT NULL,
-  fileData LONGBLOB,
-  fileType VARCHAR (50) NOT NULL,
-  addedDate DATE NOT NULL,
+  id_user      INT  NOT NULL REFERENCES users (id),
+  file_name     TEXT NOT NULL,
+  file_data     LONGBLOB,
+  file_type     VARCHAR (50) NOT NULL,
+  added_date    DATE NOT NULL,
 );

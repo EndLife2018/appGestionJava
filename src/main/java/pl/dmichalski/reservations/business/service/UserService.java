@@ -11,14 +11,15 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
-    private User currentUser;
+
+    public static User currentUser;
 
     public Boolean loginUser(String username, String password) {
         currentUser = userRepository.findByUsernameEqualsAndPasswordEquals(username, password);
         return currentUser != null;
     }
 
-    public User getCurrentUser() {
+    public static User getCurrentUser() {
         return currentUser;
     }
 }

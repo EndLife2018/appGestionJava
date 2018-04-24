@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.dmichalski.reservations.business.entity.old.RoomStatus;
 import pl.dmichalski.reservations.business.entity.domain.RoomStatusesCount;
-import pl.dmichalski.reservations.business.repository.RoomStatusRepository;
+import pl.dmichalski.reservations.business.repository.old.RoomStatusRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

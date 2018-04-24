@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.dmichalski.reservations.business.entity.old.PaymentMethod;
 import pl.dmichalski.reservations.business.entity.domain.PaymentMethodCount;
-import pl.dmichalski.reservations.business.repository.PaymentMethodRepository;
+import pl.dmichalski.reservations.business.repository.old.PaymentMethodRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -75,3 +75,5 @@ INSERT INTO room_x_reservation VALUES (3, 2, 150);
 INSERT INTO users VALUES (1, 'admin', 'admin');
 
 INSERT INTO files VALUES (1, '1', 'fileName',null,'fileType', '1970-01-01');
+INSERT INTO files VALUES (2, '1', 'fileName',null,'fileType', '1970-01-01');
+INSERT INTO files VALUES (3, '1', 'fileName',null,'fileType', '1970-01-01');

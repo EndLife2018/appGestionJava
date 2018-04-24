@@ -3,6 +3,8 @@ package pl.dmichalski.reservations.business.entity;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "files")
@@ -16,17 +18,17 @@ public class File {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @Column(name = "fileName")
+    @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "password")
+    @Column(name = "file_data")
     private Blob fileData;
 
-    @Column(name = "fileType")
-    private Blob fileType;
+    @Column(name = "file_type")
+    private String fileType;
 
-    @Column(name = "addedDate")
-    private Blob addedDate;
+    @Column(name = "added_date")
+    private Date addedDate;
 
     public long getId() {
         return id;
@@ -60,19 +62,36 @@ public class File {
         this.fileData = fileData;
     }
 
-    public Blob getFileType() {
+    public String getFileType() {
         return fileType;
     }
 
-    public void setFileType(Blob fileType) {
+    public void setFileType(String fileType) {
         this.fileType = fileType;
     }
 
-    public Blob getAddedDate() {
+    public Date getAddedDate() {
         return addedDate;
     }
 
-    public void setAddedDate(Blob addedDate) {
+    public void setAddedDate(Date addedDate) {
         this.addedDate = addedDate;
+    }
+
+    @Override
+    public String toString() {
+        return this.fileName + " - " + this.fileType + " - " + this.addedDate;
+    }
+
+    public File(User user, String fileName, Blob fileData, String fileType, Date addedDate) {
+        this.user = user;
+        this.fileName = fileName;
+        this.fileData = fileData;
+        this.fileType = fileType;
+        this.addedDate = addedDate;
+    }
+
+    public File() {
+        this.addedDate = Date.valueOf(LocalDate.now());
     }
 }
