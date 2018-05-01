@@ -7,6 +7,7 @@ import pl.dmichalski.reservations.business.service.FileService;
 import pl.dmichalski.reservations.business.service.UserService;
 import pl.dmichalski.reservations.business.ui.main_menu.view.MainMenu;
 import pl.dmichalski.reservations.business.ui.main_menu.view.modal.FileAdded;
+import pl.dmichalski.reservations.business.ui.main_menu.view.modal.Search;
 import pl.dmichalski.reservations.shared.controller.AbstractFrameController;
 
 import javax.swing.*;
@@ -25,17 +26,20 @@ public class MainMenuController extends AbstractFrameController {
     private MainMenu mainMenuFrame;
     private UserService userService;
     private FileService fileService;
+    private DefaultListModel<File> showedFileList;
     private DefaultListModel<File> fileList;
     private FileAdded fileAddedFrame;
+    private Search searchFrame;
     private String hasToReverseOrderBy;
 
 
     @Autowired
-    public MainMenuController(MainMenu mainMenuFrame, UserService userService, FileService fileService, FileAdded fileAdded) {
+    public MainMenuController(MainMenu mainMenuFrame, UserService userService, FileService fileService, FileAdded fileAdded, Search searchFrame) {
         this.mainMenuFrame = mainMenuFrame;
         this.userService = userService;
         this.fileService = fileService;
         this.fileAddedFrame = fileAdded;
+        this.searchFrame = searchFrame;
         this.preparePopup();
     }
 
@@ -51,6 +55,7 @@ public class MainMenuController extends AbstractFrameController {
         this.registerAction(this.fileAddedFrame.getOkButton(), (e) -> {
             this.fileAddedFrame.setVisible(false);
         });
+        this.registerAction(this.searchFrame.getButtonOK(), (e) -> this.search());
     }
 
     private void openFile() throws IOException {
@@ -61,15 +66,19 @@ public class MainMenuController extends AbstractFrameController {
     public void prepareAndOpenFrame() {
         mainMenuFrame.setContentPane(mainMenuFrame.getPanel1());
         mainMenuFrame.getLabelCurrentUser().setText("Espace personnel de " + UserService.getCurrentUser().getUsername());
+        showedFileList = new DefaultListModel<>();
         fileList = new DefaultListModel<>();
-        fileService.getFilesForCurrentUser().forEach(fileList::addElement);
-        mainMenuFrame.appendFileList(fileList);
+        List<File> files = fileService.getFilesForCurrentUser();
+        files.forEach(showedFileList::addElement);
+        files.forEach(fileList::addElement);
+        mainMenuFrame.appendFileList(showedFileList);
         mainMenuFrame.setVisible(true);
 
         this.registerAction(mainMenuFrame.getSupprimerButton(), (e) -> this.onDeleteClicked());
         this.registerAction(mainMenuFrame.getSortByDateButton(), (e) -> this.sortList("date"));
         this.registerAction(mainMenuFrame.getSortByNameButton(), (e) -> this.sortList("name"));
         this.registerAction(mainMenuFrame.getSortByTypeButton(), (e) -> this.sortList("type"));
+        this.registerAction(mainMenuFrame.getRechercherButton(), (e) -> this.searchFrame.setVisible(true));
 
         this.registerAction(mainMenuFrame.getAjouterButton(), (e) -> {
             try {
@@ -87,9 +96,21 @@ public class MainMenuController extends AbstractFrameController {
         });
     }
 
+    private void search() {
+        List<File> modelList = (List<File>)(Object)Arrays.asList(this.fileList.toArray());
+        modelList = modelList.stream().filter(f -> f.getFileName().contains(this.searchFrame.getSearchField().getText())).collect(Collectors.toList());
+        showedFileList = new DefaultListModel<>();
+        modelList.forEach(r -> showedFileList.addElement(r));
+        this.mainMenuFrame.getList1().setModel(showedFileList);
+        this.mainMenuFrame.getList1().setSelectedIndex(0);
+        this.searchFrame.getSearchField().setText("");
+        this.searchFrame.dispose();
+
+    }
+
     private void sortList(String type) {
         Integer selectedIndex = this.mainMenuFrame.getList1().getSelectedIndex();
-        List<File> modelList = (List<File>)(Object)Arrays.asList(this.fileList.toArray());
+        List<File> modelList = (List<File>)(Object)Arrays.asList(this.showedFileList.toArray());
         switch (type) {
             case "date":
                 if(this.hasToReverseOrderBy != null && this.hasToReverseOrderBy.equals("date")) {
@@ -119,9 +140,9 @@ public class MainMenuController extends AbstractFrameController {
                 }
                 break;
         }
-        fileList = new DefaultListModel<>();
-        modelList.forEach(r -> fileList.addElement(r));
-        this.mainMenuFrame.getList1().setModel(fileList);
+        showedFileList = new DefaultListModel<>();
+        modelList.forEach(r -> showedFileList.addElement(r));
+        this.mainMenuFrame.getList1().setModel(showedFileList);
         this.mainMenuFrame.getList1().setSelectedIndex(selectedIndex);
     }
 
@@ -150,7 +171,7 @@ public class MainMenuController extends AbstractFrameController {
 
     private void onDeleteClicked() {
         fileService.deleteFile(mainMenuFrame.getList1().getSelectedValue());
-        fileList.removeElementAt(mainMenuFrame.getList1().getSelectedIndex());
+        showedFileList.removeElementAt(mainMenuFrame.getList1().getSelectedIndex());
     }
 
     public void onModifierClicked() {
@@ -169,7 +190,7 @@ public class MainMenuController extends AbstractFrameController {
             workFile.setFileType(name.substring(name.lastIndexOf("."),name.length()).replace(".",""));
             workFile.setUser(UserService.currentUser);
             fileService.saveFile(workFile);
-            fileList.addElement(workFile);
+            showedFileList.addElement(workFile);
         }
     }
 

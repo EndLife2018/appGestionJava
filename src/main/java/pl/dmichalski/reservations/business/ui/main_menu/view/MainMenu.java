@@ -22,6 +22,7 @@ public class MainMenu extends JFrame {
     private JButton sortByDateButton;
     private JButton sortByTypeButton;
     private JPanel btnPanel;
+    private JButton rechercherButton;
 
 
     public MainMenu() throws HeadlessException {
@@ -88,6 +89,10 @@ public class MainMenu extends JFrame {
 
     public JButton getSortByTypeButton() {
         return sortByTypeButton;
+    }
+
+    public JButton getRechercherButton() {
+        return rechercherButton;
     }
 }
 
